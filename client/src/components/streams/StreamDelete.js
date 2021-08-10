@@ -1,9 +1,12 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+
+import { getStreamSelector } from "../../redux/selectors/streams";
+import { getStream, deleteStream } from "../../redux/actions/streams";
+import { STREAMS_LIST_PATH, RESPONSE_STATUS_SUCCESS } from "../../const";
 
 import Modal from "../Modal";
-import { STREAMS_LIST_PATH, RESPONSE_STATUS_SUCCESS } from "../../const";
-import { getStream, deleteStream } from "../../redux/actions/streams";
 
 const contentStyles = {
     fontSize: 15,
@@ -15,61 +18,48 @@ const titleStyles = {
     fontSize: 20,
     fontWeight: "bold"
 }
-class StreamDelete extends Component {
-    componentDidMount() {
-        const { stream, id, getStream } = this.props;
+const StreamDelete = ({ history}) => {
+    const { id } = useParams();
+    const stream = useSelector(() => getStreamSelector(id));
 
-        if (!stream) getStream(id);
-    }
+    const dispatch = useDispatch();
 
-    handleDeleteStream = () => {
-        const { id, deleteStream, history } = this.props;
+    useEffect(() => {
+        if (!stream) dispatch(getStream(id));
+    }, [dispatch])
 
-        /*  
-            todo: handle error better here
-            see if the issue is related to internet connection etc.
-            and based on the issue show a clear warning message 
-        */
-        deleteStream(id)
+    const handleDeleteStream = () => {
+        if (!id) return;
+
+        dispatch(deleteStream(id))
         .then(({ status }) => status === RESPONSE_STATUS_SUCCESS && history.push(STREAMS_LIST_PATH))
         .catch(error => console.log(error));
     }
 
-    renderContent(title) {
-        return (
-            <div style={contentStyles}>
-                Are you sure you want to delete this stream?
-                <p style={titleStyles}>{title}</p>
-            </div>
-        )
+    const renderContent = (title) => (
+        <div style={contentStyles}>
+            Are you sure you want to delete this stream?
+            <p style={titleStyles}>{title}</p>
+        </div>
+    );
+
+    if (!stream) {
+        return <div>Loading...</div>;
     }
 
-    render() {
-        const { stream, history } = this.props;
-
-        if (!stream) {
-            return <div>Loading...</div>;
-        }
-
-        return (
-            <div>
-             <Modal 
+    return (
+        <div>
+            <Modal 
                 header="Delete Stream"
-                content={this.renderContent(stream.title)}
+                content={renderContent(stream.title)}
                 cancelButtonText="Nevermind"
                 confirmButtonText="Yes, I'm sure"
-                handleConfirm={this.handleDeleteStream}
+                handleConfirm={handleDeleteStream}
                 customCancelPath={STREAMS_LIST_PATH}
                 history={history}
             />
-            </div>
-        );
-    }
+        </div>
+    );
 }
 
-const mapStateToProps = ({ streams }, ownProps) => ({
-    stream: streams[ownProps.match.params.id],
-    id: ownProps.match.params.id
-});
-
-export default connect(mapStateToProps, { getStream, deleteStream })(StreamDelete);
+export default StreamDelete;

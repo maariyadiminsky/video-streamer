@@ -10,15 +10,16 @@ import StreamForm from "./StreamForm";
 
 const StreamEdit = ({ history }) => {
     const { id } = useParams();
-    const stream = useSelector(getStreamSelector);
+    const stream = useSelector(() => getStreamSelector(id));
 
     const dispatch = useDispatch();
 
     useEffect(() => {
         if (!stream) dispatch(getStream(id));
-    }, []);
+    }, [dispatch]);
 
     const handleOnSubmit = (formValues) => {
+        if (!id) return;
     /*  
         todo: handle error better here
         see if the issue is related to internet connection etc.
