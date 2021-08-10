@@ -9,7 +9,9 @@ import {
     GET_STREAMS,
 } from "../actions/types";
 
-export default (state = {}, { type, payload }) => {
+const INITIAL_STATE = {};
+
+export default (state = INITIAL_STATE, { type, payload }) => {
     switch(type) {
         case CREATE_STREAM:
         case EDIT_STREAM:
