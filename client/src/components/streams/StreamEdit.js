@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
+import isEmpty from "lodash/isEmpty";
 
 import { getStreamSelector } from "../../redux/selectors/streams";
 import { getStream, editStream } from "../../redux/actions/streams";
@@ -10,12 +11,12 @@ import StreamForm from "./StreamForm";
 
 const StreamEdit = ({ history }) => {
     const { id } = useParams();
-    const stream = useSelector(() => getStreamSelector(id));
+    const stream = useSelector(({ streams }) => getStreamSelector(streams, id));
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!stream) dispatch(getStream(id));
+        if (isEmpty(stream)) dispatch(getStream(id));
     }, [dispatch]);
 
     const handleOnSubmit = (formValues) => {
@@ -30,7 +31,7 @@ const StreamEdit = ({ history }) => {
         .catch(error => console.log(error));
     }
 
-    if (!stream) {
+    if (isEmpty(stream)) {
         return <div>Loading...</div>
     }
 
@@ -47,6 +48,6 @@ const StreamEdit = ({ history }) => {
             handleOnSubmit={handleOnSubmit}
         />
     );
-};
+}
 
 export default StreamEdit;

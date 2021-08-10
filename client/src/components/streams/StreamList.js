@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import isEmpty from "lodash/isEmpty";
 
 import { getStreamsSelector } from "../../redux/selectors/streams";
 import { getCurrentlyLoggedInUserIdSelector, IsUserSignedInSelector } from "../../redux/selectors/auth";
-import { getStreams} from "../../redux/actions/streams";
+import { getStreams } from "../../redux/actions/streams";
 import { 
     SHOW_STREAM_PATH, 
     CREATE_NEW_STREAM_PATH, 
@@ -20,8 +21,8 @@ const StreamList = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!streams) getStreams();
-    }, [dispatch])
+        if (isEmpty(streams)) dispatch(getStreams());
+    }, [dispatch]);
 
     // if the incoming stream has the same userId as the
     // current logged in user--render the buttons
@@ -84,7 +85,7 @@ const StreamList = () => {
         ));
     }
 
-    if (!streams) {
+    if (isEmpty(streams)) {
         return <div>Loading...</div>
     }
 
@@ -97,6 +98,6 @@ const StreamList = () => {
             {renderCreateStreamButtonTry()}
         </div>
     );
-};
+}
 
 export default StreamList;

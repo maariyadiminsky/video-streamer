@@ -23,6 +23,6 @@ const StreamCreate = ({ history }) => {
             handleOnSubmit={handleOnSubmit}
         />
     );
-};
+}
 
 export default StreamCreate;

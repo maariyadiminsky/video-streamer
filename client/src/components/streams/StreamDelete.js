@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import isEmpty from "lodash/isEmpty";
 
 import { getStreamSelector } from "../../redux/selectors/streams";
 import { getStream, deleteStream } from "../../redux/actions/streams";
@@ -20,13 +21,13 @@ const titleStyles = {
 }
 const StreamDelete = ({ history}) => {
     const { id } = useParams();
-    const stream = useSelector(() => getStreamSelector(id));
+    const stream = useSelector(({ streams }) => getStreamSelector(streams, id));
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!stream) dispatch(getStream(id));
-    }, [dispatch])
+        if (isEmpty(stream)) dispatch(getStream(id));
+    }, [dispatch]);
 
     const handleDeleteStream = () => {
         if (!id) return;
@@ -34,7 +35,7 @@ const StreamDelete = ({ history}) => {
         dispatch(deleteStream(id))
         .then(({ status }) => status === RESPONSE_STATUS_SUCCESS && history.push(STREAMS_LIST_PATH))
         .catch(error => console.log(error));
-    }
+    };
 
     const renderContent = (title) => (
         <div style={contentStyles}>
@@ -43,7 +44,7 @@ const StreamDelete = ({ history}) => {
         </div>
     );
 
-    if (!stream) {
+    if (isEmpty(stream)) {
         return <div>Loading...</div>;
     }
 
@@ -60,6 +61,6 @@ const StreamDelete = ({ history}) => {
             />
         </div>
     );
-};
+}
 
 export default StreamDelete;
