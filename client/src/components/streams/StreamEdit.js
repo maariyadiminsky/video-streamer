@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -15,7 +15,7 @@ const StreamEdit = ({ history }) => {
 
     useEffect(() => {
         if (!stream) dispatch(getStream(id));
-    }, [stream, id, dispatch]);
+    }, []);
 
     const handleOnSubmit = (formValues) => {
     /*  
