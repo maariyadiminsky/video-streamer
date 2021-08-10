@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 
-class StreamForm extends Component {
+class StreamForm extends Component { 
     renderInputError(error) {
         return (
             <div className="ui error tiny message">
