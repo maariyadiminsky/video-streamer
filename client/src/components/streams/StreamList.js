@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { getStreams} from "../../actions/streams";
+import { getStreams} from "../../redux/actions/streams";
 import { 
     SHOW_STREAM_PATH, 
     CREATE_NEW_STREAM_PATH, 

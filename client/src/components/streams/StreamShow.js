@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import flv from "flv.js";
 import { connect } from "react-redux";
 
-import { getStream } from "../../actions/streams";
+import { getStream } from "../../redux/actions/streams";
 import { FLV_STREAM_URL, VIDEO_TYPE_FLV } from "../../const";
 
 const videoStyles = {

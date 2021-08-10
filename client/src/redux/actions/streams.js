@@ -1,5 +1,5 @@
-import streamsAPI from "../apis/streamsAPI";
-import { STREAM_ENDPOINT, STREAMS_ENDPOINT } from "../apis/const";
+import streamsAPI from "../../apis/streamsAPI";
+import { STREAM_ENDPOINT, STREAMS_ENDPOINT } from "../../apis/const";
 
 import { 
     CREATE_STREAM,

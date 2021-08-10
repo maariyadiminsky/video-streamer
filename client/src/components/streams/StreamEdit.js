@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import StreamForm from "./StreamForm";
-import { getStream, editStream } from "../../actions/streams";
+import { getStream, editStream } from "../../redux/actions/streams";
 import { STREAMS_LIST_PATH, RESPONSE_STATUS_SUCCESS } from "../../const";
 
 const StreamEdit = ({ history }) => {

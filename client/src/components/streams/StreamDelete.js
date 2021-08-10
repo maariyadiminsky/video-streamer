@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import Modal from "../Modal";
 import { STREAMS_LIST_PATH, RESPONSE_STATUS_SUCCESS } from "../../const";
-import { getStream, deleteStream } from "../../actions/streams";
+import { getStream, deleteStream } from "../../redux/actions/streams";
 
 const contentStyles = {
     fontSize: 15,

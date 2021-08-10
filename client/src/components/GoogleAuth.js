@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { signUserIn, signUserOut } from "../actions/auth";
+import { signUserIn, signUserOut } from "../redux/actions/auth";
 import { LOADING, EMAIL, SIGN_IN, SIGN_OUT } from "../const";
 
 // NOTE: Google API's authentication status persists between page reloads
