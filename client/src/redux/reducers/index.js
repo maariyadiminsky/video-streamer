@@ -1,7 +1,7 @@
 import  { combineReducers } from "redux";
 
-import authReducer from "./authReducer";
-import streamReducer from "./streamReducer";
+import authReducer from "./auth";
+import streamReducer from "./stream";
 
 export default combineReducers({
     auth: authReducer,
