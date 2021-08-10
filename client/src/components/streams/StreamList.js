@@ -1,7 +1,9 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
+import { getStreamsSelector } from "../../redux/selectors/streams";
+import { getCurrentlyLoggedInUserIdSelector, IsUserSignedInSelector } from "../../redux/selectors/auth";
 import { getStreams} from "../../redux/actions/streams";
 import { 
     SHOW_STREAM_PATH, 
@@ -10,18 +12,20 @@ import {
     DELETE_STREAM_PATH 
 } from "../../const";
 
-class StreamList extends Component {
-    componentDidMount() {
-        const { getStreams } = this.props;
+const StreamList = () => {
+    const streams = useSelector(getStreamsSelector);
+    const currentLoggedInUserId = useSelector(getCurrentlyLoggedInUserIdSelector);
+    const isUserSignedIn = useSelector(IsUserSignedInSelector);
 
-        getStreams();
-    }
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!streams) getStreams();
+    }, [dispatch])
 
     // if the incoming stream has the same userId as the
     // current logged in user--render the buttons
-    renderActionButtonsTry(streamId, streamUserId){
-        const { currentLoggedInUserId } = this.props;
-
+    const renderActionButtonsTry = (streamId, streamUserId) => {
         if (currentLoggedInUserId === streamUserId) {
             return (
                 <div className="right floated content">
@@ -44,9 +48,7 @@ class StreamList extends Component {
         return "";
     }
 
-    renderCreateStreamButtonTry() {
-        const { isUserSignedIn } = this.props;
-
+    const renderCreateStreamButtonTry = () =>{
         if (isUserSignedIn) {
             return (
                 <div style={{ textAlign: "right" }}>
@@ -58,16 +60,14 @@ class StreamList extends Component {
         return "";
     }
 
-    renderStreams() {
-        const { streams } = this.props;
-
-        if (streams.length === 0) {
+    const renderStreams = () => {
+        if (streams && streams.length === 0) {
             return <div>No streams yet! Try creating one.</div>
         }
 
         return streams.map(({ id, title, description, userId }) => (
             <div className="item" key={id}>
-                {this.renderActionButtonsTry(id, userId)}
+                {renderActionButtonsTry(id, userId)}
                 <i className="large middle aligned icon tv" />
                 <div className="content">
                     <Link
@@ -84,30 +84,19 @@ class StreamList extends Component {
         ));
     }
 
-    render() {
-        const { streams } = this.props;
-
-        if (!streams) {
-            return <div>Loading...</div>
-        }
-
-        return (
-            <div>
-                <h2>Streams</h2>
-                <div className="ui celled list">
-                    {this.renderStreams()}
-                </div>
-                {this.renderCreateStreamButtonTry()}
-            </div>
-        );
+    if (!streams) {
+        return <div>Loading...</div>
     }
-}
 
-// turn objects into array for easier mapping
-const mapStateToProps = ({ streams, auth: { userId, isUserSignedIn } }) => ({
-    streams: Object.values(streams),
-    currentLoggedInUserId: userId,
-    isUserSignedIn
-});
+    return (
+        <div>
+            <h2>Streams</h2>
+            <div className="ui celled list">
+                {renderStreams()}
+            </div>
+            {renderCreateStreamButtonTry()}
+        </div>
+    );
+};
 
-export default connect(mapStateToProps, { getStreams })(StreamList);
+export default StreamList;

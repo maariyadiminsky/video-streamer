@@ -47,6 +47,6 @@ const StreamEdit = ({ history }) => {
             handleOnSubmit={handleOnSubmit}
         />
     );
-}
+};
 
 export default StreamEdit;

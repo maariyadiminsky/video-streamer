@@ -29,6 +29,6 @@ const Modal = ({ header, content, cancelButtonText, confirmButtonText, history, 
         </div>,
         document.getElementById("modal")
     );
-}
+};
 
 export default Modal;

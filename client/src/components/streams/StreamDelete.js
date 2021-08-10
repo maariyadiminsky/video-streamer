@@ -60,6 +60,6 @@ const StreamDelete = ({ history}) => {
             />
         </div>
     );
-}
+};
 
 export default StreamDelete;
