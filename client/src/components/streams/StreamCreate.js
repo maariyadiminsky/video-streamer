@@ -24,3 +24,5 @@ const StreamCreate = ({ history }) => {
         />
     );
 };
+
+export default StreamCreate;
