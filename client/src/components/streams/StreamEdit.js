@@ -9,7 +9,7 @@ import StreamForm from "./StreamForm";
 
 const StreamEdit = ({ history }) => {
     const { id } = useParams();
-    const stream = useSelector(({ streams }) => id && streams[id]);
+    const stream = useSelector(getStreamSelector);
 
     const dispatch = useDispatch();
 
