@@ -1,18 +1,15 @@
-import React from "react";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import StreamForm from "./StreamForm";
 import { createStream } from "../../redux/actions/streams";
 import { STREAMS_LIST_PATH, RESPONSE_STATUS_CREATED } from "../../const";
 
-const StreamCreate = ({ createStream, history }) => {
+import StreamForm from "./StreamForm";
+
+const StreamCreate = ({ history }) => {
+    const dispatch = useDispatch();
+
     const handleOnSubmit = (formValues) => {
-        /*  
-            todo: handle error better here
-            see if the issue is related to internet connection etc.
-            and based on the issue show a clear warning message 
-        */
-        createStream(formValues)
+        dispatch(createStream(formValues))
             .then(({status}) => status === RESPONSE_STATUS_CREATED && history.push(STREAMS_LIST_PATH))
             .catch(error => console.log(error));
     }
@@ -26,6 +23,4 @@ const StreamCreate = ({ createStream, history }) => {
             handleOnSubmit={handleOnSubmit}
         />
     );
-}
-
-export default connect(null, { createStream })(StreamCreate);
+};
