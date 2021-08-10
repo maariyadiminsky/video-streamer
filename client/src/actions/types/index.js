@@ -1,5 +1,5 @@
 
-// streams
+// stream
 export const CREATE_STREAM = "stream/createStream";
 export const DELETE_STREAM = "stream/deleteStream";
 export const EDIT_STREAM = "stream/editStream";
