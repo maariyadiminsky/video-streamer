@@ -1,55 +1,49 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
 import StreamForm from "./StreamForm";
 import { getStream, editStream } from "../../actions/streams";
 import { STREAMS_LIST_PATH, RESPONSE_STATUS_SUCCESS } from "../../const";
 
-class StreamEdit extends Component {
-    componentDidMount() {
-        const { stream, id, getStream } = this.props;
+const StreamEdit = ({ history }) => {
+    const { id } = useParams();
+    const stream = useSelector(({ streams }) => id && streams[id]);
 
-        if (!stream) getStream(id);
-    }
+    const dispatch = useDispatch();
 
-    handleOnSubmit = (formValues) => {
-        const { stream: { id }, editStream, history } = this.props;
+    useEffect(() => {
+        if (!stream) dispatch(getStream(id));
+    }, [stream, id, dispatch]);
+
+    const handleOnSubmit = (formValues) => {
     /*  
         todo: handle error better here
         see if the issue is related to internet connection etc.
         and based on the issue show a clear warning message 
     */
-    editStream(id, formValues)
+    dispatch(editStream(id, formValues))
         .then(({ status }) => status === RESPONSE_STATUS_SUCCESS && history.push(STREAMS_LIST_PATH))
         .catch(error => console.log(error));
     }
 
-    render() {
-        const { stream } = this.props;
-
-        if (!stream) {
-            return <div>Loading...</div>
-        }
-
-        return (
-            <StreamForm 
-                initialValues={{
-                    title: stream.title,
-                    description: stream.description
-                }}
-                formTitle="Edit your Stream"
-                fieldTitle="Edit title"
-                fieldDescription="Edit Description"
-                buttonText="Update Stream"
-                handleOnSubmit={this.handleOnSubmit}
-            />
-        );
+    if (!stream) {
+        return <div>Loading...</div>
     }
+
+    return (
+        <StreamForm 
+            initialValues={{
+                title: stream.title,
+                description: stream.description
+            }}
+            formTitle="Edit your Stream"
+            fieldTitle="Edit title"
+            fieldDescription="Edit Description"
+            buttonText="Update Stream"
+            handleOnSubmit={handleOnSubmit}
+        />
+    );
 }
 
-const mapStateToProps = ({ streams }, ownProps) => ({ 
-    stream: streams[ownProps.match.params.id],
-    id: ownProps.match.params.id
-});
-
-export default connect(mapStateToProps, { getStream, editStream })(StreamEdit);
+export default StreamEdit;
