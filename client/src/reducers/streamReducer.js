@@ -1,4 +1,5 @@
-import { omit, mapKeys } from "lodash";
+import omit from "lodash/omit";
+import mapKeys from "lodash/mapKeys";
 
 import { 
     CREATE_STREAM,
