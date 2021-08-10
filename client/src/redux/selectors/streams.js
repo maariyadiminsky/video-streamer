@@ -1,1 +1,1 @@
-export const getStream = (({ streams }, id) => id && streams[id]);
+export const getStreamSelector = (({ streams }, id) => id && streams[id]);

@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import StreamForm from "./StreamForm";
+import { getStreamSelector } from "../../redux/selectors/streams";
 import { getStream, editStream } from "../../redux/actions/streams";
 import { STREAMS_LIST_PATH, RESPONSE_STATUS_SUCCESS } from "../../const";
+import StreamForm from "./StreamForm";
 
 const StreamEdit = ({ history }) => {
     const { id } = useParams();
