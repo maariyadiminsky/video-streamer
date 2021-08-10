@@ -1,7 +1,21 @@
 import React, { Component } from "react";
-import { Field, reduxForm } from "redux-form";
+import { Field, Form } from "redux-form";
 
 class StreamForm extends Component {
+    validate = ({ title, description }) => {
+        let errors = {};
+    
+        if (!title) {
+            errors.title = "Streams must have a title"
+        }
+    
+        if (!description) {
+            errors.description = "Please tell us a bit about your Stream"
+        }
+    
+        return errors;
+    }
+
     renderInputError(error) {
         return (
             <div className="ui error tiny message">
@@ -23,43 +37,33 @@ class StreamForm extends Component {
     }
 
     render() {
-        // note: handleSubmit comes from redux-form and included event.preventDefault()
-        // handleOnSubmit comes from parent component and it gets the formValues
         const { 
+            initialValues,
             formTitle,
             fieldTitle,
             fieldDescription,
             buttonText,
-            handleOnSubmit, 
-            handleSubmit 
+            handleOnSubmit, // passed from parent component
         } = this.props;
 
         return (
-            <form onSubmit={handleSubmit(handleOnSubmit)} className="ui form error">
-                <h1>{formTitle}</h1>
-                <Field name="title" component={this.renderInput} label={fieldTitle}/>
-                <Field name="description" component={this.renderInput} label={fieldDescription} />
-                <button className="ui button large inverted red">{buttonText}</button>
-            </form>
+            <Form 
+                initialValues={initialValues}
+                validate={this.validate}
+                onSubmit={handleOnSubmit}
+                className="ui form error"
+            >
+                {({ handleSubmit }) => ( // from react-final form, calls event.preventDefault()
+                    <form onSubmit={handleSubmit}>
+                        <h1>{formTitle}</h1>
+                        <Field name="title" component={this.renderInput} label={fieldTitle}/>
+                        <Field name="description" component={this.renderInput} label={fieldDescription} />
+                        <button className="ui button large inverted red">{buttonText}</button>
+                    </form>
+                )}
+            </Form>
         );
     }
 }
 
-const validate = ({ title, description }) => {
-    let errors = {};
-
-    if (!title) {
-        errors.title = "Streams must have a title"
-    }
-
-    if (!description) {
-        errors.description = "Please tell us a bit about your Stream"
-    }
-
-    return errors;
-}
-
-export default reduxForm({
-    form: "streamForm",
-    validate
-})(StreamForm);
+export default StreamForm;
