@@ -1,2 +1,2 @@
 export const getCurrentlyLoggedInUserIdSelector = (({ auth: { userId }}) => userId );
-export const IsUserSignedInSelector = (({ auth: { isUserSignedIn }}) => isUserSignedIn );
+export const isUserSignedInSelector = (({ auth: { isUserSignedIn }}) => isUserSignedIn );

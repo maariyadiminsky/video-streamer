@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import isEmpty from "lodash/isEmpty";
 
 import { getStreamsSelector } from "../../redux/selectors/streams";
-import { getCurrentlyLoggedInUserIdSelector, IsUserSignedInSelector } from "../../redux/selectors/auth";
+import { getCurrentlyLoggedInUserIdSelector, isUserSignedInSelector } from "../../redux/selectors/auth";
 import { getStreams } from "../../redux/actions/streams";
 import { 
     SHOW_STREAM_PATH, 
@@ -16,7 +16,7 @@ import {
 const StreamList = () => {
     const streams = useSelector(getStreamsSelector);
     const currentLoggedInUserId = useSelector(getCurrentlyLoggedInUserIdSelector);
-    const isUserSignedIn = useSelector(IsUserSignedInSelector);
+    const isUserSignedIn = useSelector(isUserSignedInSelector);
 
     const dispatch = useDispatch();
 

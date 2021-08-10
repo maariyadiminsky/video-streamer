@@ -1,11 +1,19 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import { useEffect, useRef, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import { isUserSignedInSelector } from "../redux/selectors/auth";
 import { signUserIn, signUserOut } from "../redux/actions/auth";
 import { LOADING, EMAIL, SIGN_IN, SIGN_OUT } from "../const";
 
 // NOTE: Google API's authentication status persists between page reloads
-class GoogleAuth extends Component {
-    componentDidMount () {
+const GoogleAuth = () => {
+    const isUserSignedIn = useSelector(isUserSignedInSelector);
+
+    const dispatch = useDispatch();
+
+    const auth = useRef("");
+
+    useEffect(() => {
         // loads up google api OAuth client library (I only need email for this app)
         window.gapi.load("client:auth2", () => {
             // return a promise so can pass in callback or .then when complete
@@ -14,71 +22,60 @@ class GoogleAuth extends Component {
                 scope: EMAIL
             }).then(() => {
                 // api is ready to be used so get auth instance
-                this.auth = window.gapi.auth2.getAuthInstance();
+                auth.current = window.gapi.auth2.getAuthInstance();
 
                 // check if user is signed in on initial load
-                this.handleShouldUserSignIn(this.auth.isSignedIn.get());
+                handleShouldUserSignIn(auth.isSignedIn.get());
 
                 // event listener that listens if user has signed in
                 // callback passed in will get the boolean value
-                this.auth.isSignedIn.listen(this.handleShouldUserSignIn);
+                auth.current.isSignedIn.listen(handleShouldUserSignIn);
             });
         });
-    }
+    }, [dispatch]);
 
     // for setting user sign in status
-    handleShouldUserSignIn = (shouldUserSignIn = null) => {
-        const { signUserIn, signUserOut } = this.props;
-
+    const handleShouldUserSignIn = (shouldUserSignIn = null) => {
         // nothing should happen while google api is still loading sign in status
         if (shouldUserSignIn === null) return;
 
         // sign user in or out
-        shouldUserSignIn ? signUserIn(this.getUserId()) : signUserOut(this.getUserId());
+        shouldUserSignIn ? dispatch(signUserIn(getUserId())) : dispatch(signUserOut(getUserId()));
     }
 
-    getUserId = () => this.auth.currentUser.get().getId();
+    const getUserId = () => auth ? auth.currentUser.get().getId() : null;
 
     // for when user clicks sign in/ sign out auth button
-    handleUpdateUserAuth = () => {
-        const { isUserSignedIn } = this.props;
-
+    const handleUpdateUserAuth = () => {
         // nothing should happen while google api is still loading sign in status
         if (isUserSignedIn === null) return;
 
         // if signed in, then when user clicks they want to sign out 
         // if signed out, then when user clicks they want to sign in
         if (isUserSignedIn) {
-            this.auth.signOut();
-            this.handleShouldUserSignIn(false);
+            console.log("in handleUpdateUserAuth", auth);
+            auth.signOut();
+            handleShouldUserSignIn(false);
         } else {
-            this.auth.signIn();
-            this.handleShouldUserSignIn(true);
+            auth.signIn();
+            handleShouldUserSignIn(true);
         }
     }
 
-    renderButtonForAuthUser() {
-        const { isUserSignedIn } = this.props;
-
+    const renderButtonForAuthUser = () => {
         // null means, on initial load
-        if (isUserSignedIn == null) return LOADING;
+        if (isUserSignedIn === null) return LOADING;
         return isUserSignedIn ? SIGN_OUT : SIGN_IN;
     }
 
-    renderButtonLoaderTry = () => this.props.isUserSignedIn == null && "loading";
+    const renderButtonLoaderTry = () => isUserSignedIn == null && LOADING;
 
-    render() {
-        return (
-            <button className={`ui red ${this.renderButtonLoaderTry()} button`} onClick={this.handleUpdateUserAuth}>
-                <i className="google icon" />
-                {this.renderButtonForAuthUser()}
-            </button>
-        );
-    }
+    return (
+        <button className={`ui red ${renderButtonLoaderTry()} button`} onClick={handleUpdateUserAuth}>
+            <i className="google icon" />
+            {renderButtonForAuthUser()}
+        </button>
+    );
 }
 
-const mapStateToProps = ({ auth: { isUserSignedIn } }) => ({
-    isUserSignedIn
-});
-
-export default connect(mapStateToProps, { signUserIn, signUserOut })(GoogleAuth);
+export default GoogleAuth;
