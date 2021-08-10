@@ -1,8 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import { Field, Form } from "react-final-form";
 
-class StreamForm extends Component {
-    validate = ({ title, description }) => {
+const StreamForm = ({ 
+    initialValues,
+    formTitle,
+    fieldTitle,
+    fieldDescription,
+    buttonText,
+    handleOnSubmit, // passed from parent component
+}) => {
+    const validate = ({ title, description }) => {
         let errors = {};
     
         if (!title) {
@@ -16,54 +23,41 @@ class StreamForm extends Component {
         return errors;
     }
 
-    renderInputError(error) {
-        return (
-            <div className="ui error tiny message">
-                <span className="header">{error}</span>
-            </div>
-        );
-    }
-
-    renderInput = ({ label, input, meta: { touched, submitFailed, error }}) => {
+    const renderInputError = (error) => (
+        <div className="ui error tiny message">
+            <span className="header">{error}</span>
+        </div>
+    );
+    
+    const renderInput = ({ label, input, meta: { touched, submitFailed, error }}) => {
         let hasBeenTouchedAndHasError = (touched || submitFailed) && error;
 
         return (
             <div className={`field ${hasBeenTouchedAndHasError && "error"}`}>
                 <label>{label}</label>
                 <input {...input} autoComplete="off" />
-                {hasBeenTouchedAndHasError && this.renderInputError(error)}
+                {hasBeenTouchedAndHasError && renderInputError(error)}
             </div>
         );
     }
 
-    render() {
-        const { 
-            initialValues,
-            formTitle,
-            fieldTitle,
-            fieldDescription,
-            buttonText,
-            handleOnSubmit, // passed from parent component
-        } = this.props;
-
-        return (
-            <Form 
-                initialValues={initialValues}
-                validate={this.validate}
-                onSubmit={handleOnSubmit}
-                className="ui form error"
-            >
-                {({ handleSubmit }) => ( // from react-final form, calls event.preventDefault()
-                    <form onSubmit={handleSubmit} className="ui form error">
-                        <h1>{formTitle}</h1>
-                        <Field name="title" component={this.renderInput} label={fieldTitle}/>
-                        <Field name="description" component={this.renderInput} label={fieldDescription} />
-                        <button className="ui button large inverted red">{buttonText}</button>
-                    </form>
-                )}
-            </Form>
-        );
-    }
+    return (
+        <Form 
+            initialValues={initialValues}
+            validate={validate}
+            onSubmit={handleOnSubmit}
+            className="ui form error"
+        >
+            {({ handleSubmit }) => ( // from react-final form, calls event.preventDefault()
+                <form onSubmit={handleSubmit} className="ui form error">
+                    <h1>{formTitle}</h1>
+                    <Field name="title" component={renderInput} label={fieldTitle}/>
+                    <Field name="description" component={renderInput} label={fieldDescription} />
+                    <button className="ui button large inverted red">{buttonText}</button>
+                </form>
+            )}
+        </Form>
+    );
 }
 
 export default StreamForm;
