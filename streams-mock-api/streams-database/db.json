@@ -1,0 +1,16 @@
+{
+  "streams": [
+    {
+      "title": "A stream",
+      "description": "s",
+      "userId": "109956136264247890286",
+      "id": 1
+    },
+    {
+      "title": "Watch it live today",
+      "description": "dsdf",
+      "userId": "109956136264247890286",
+      "id": 2
+    }
+  ]
+}
