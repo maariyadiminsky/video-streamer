@@ -21,7 +21,7 @@ const StreamList = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (isEmpty(streams)) dispatch(getStreams());
+        dispatch(getStreams());
     }, [dispatch]);
 
     // if the incoming stream has the same userId as the
