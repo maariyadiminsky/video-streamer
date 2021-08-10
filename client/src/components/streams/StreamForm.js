@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Field, Form } from "redux-form";
+import { Field, Form } from "react-final-form";
 
 class StreamForm extends Component {
     validate = ({ title, description }) => {
@@ -54,7 +54,7 @@ class StreamForm extends Component {
                 className="ui form error"
             >
                 {({ handleSubmit }) => ( // from react-final form, calls event.preventDefault()
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} className="ui form error">
                         <h1>{formTitle}</h1>
                         <Field name="title" component={this.renderInput} label={fieldTitle}/>
                         <Field name="description" component={this.renderInput} label={fieldDescription} />
