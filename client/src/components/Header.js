@@ -6,11 +6,11 @@ const Header = () => {
     return (
         <div className="ui menu">
             <Link to="/" className="item">
-                Twitch My Niche
+                Video Streamer
             </Link>
             <div className="right menu">
                 <Link to="/" className="item">
-                        All Streams
+                        Streams
                 </Link>
                 <div className="item">
                     <GoogleAuth />
