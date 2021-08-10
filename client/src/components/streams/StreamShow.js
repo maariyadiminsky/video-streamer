@@ -32,7 +32,7 @@ const StreamShow = () => {
         // note: tells flv player to stop streaming
         // and removes attachment to the video
         return () => flvVideoPlayer && flvVideoPlayer.destroy();
-    }, [dispatch, stream])
+    }, [dispatch])
 
     const setupFLVPlayer = (streamId) => {
         // create flv player
@@ -47,13 +47,9 @@ const StreamShow = () => {
         // load it
         flvVideoPlayer.load();
     }
-
-    const onHandleIt = () => {
-        console.log("In onHandleIt", videoRef);
-    }
-
+    
     if (isEmpty(stream)) {
-        return <div onClick={onHandleIt}>Loading...</div>
+        return <div>Loading...</div>
     }
     
     return (
