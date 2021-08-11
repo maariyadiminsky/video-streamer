@@ -1,7 +1,7 @@
 {
   "streams": [
     {
-      "title": "Example Stream!",
+      "title": "Example Stream",
       "description": "This is an example stream!  It has a id, title, description, and userId. You should see the userId in the API if you signed in with Google Auth. You can edit and remove your created Streams, but not someone elses streams.",
       "userId": "109956136264247890286",
       "id": 1
@@ -13,7 +13,7 @@
       "id": 2
     },
     {
-      "title": "Another Example Stream",
+      "title": "Another Example Stream!",
       "description": "Example Description",
       "userId": "109956136264247890286",
       "id": 3
