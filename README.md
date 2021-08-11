@@ -20,7 +20,7 @@ The main changes from the older version are:
 3. Other small updates for better folder structure and other best practices.
 ## Setup
 
-#### What's included
+### What's included
 This project includes:
 1. Client App
 2. Mock API Server
