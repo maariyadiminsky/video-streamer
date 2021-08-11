@@ -25,7 +25,7 @@ const GoogleAuth = () => {
                 auth.current = window.gapi.auth2.getAuthInstance();
 
                 // check if user is signed in on initial load
-                handleShouldUserSignIn(auth.isSignedIn.get());
+                handleShouldUserSignIn(auth.current.isSignedIn.get());
 
                 // event listener that listens if user has signed in
                 // callback passed in will get the boolean value
@@ -43,7 +43,7 @@ const GoogleAuth = () => {
         shouldUserSignIn ? dispatch(signUserIn(getUserId())) : dispatch(signUserOut(getUserId()));
     }
 
-    const getUserId = () => auth ? auth.currentUser.get().getId() : null;
+    const getUserId = () => auth.current ? auth.current.currentUser.get().getId() : null;
 
     // for when user clicks sign in/ sign out auth button
     const handleUpdateUserAuth = () => {
@@ -53,11 +53,10 @@ const GoogleAuth = () => {
         // if signed in, then when user clicks they want to sign out 
         // if signed out, then when user clicks they want to sign in
         if (isUserSignedIn) {
-            console.log("in handleUpdateUserAuth", auth);
-            auth.signOut();
+            auth.current.signOut();
             handleShouldUserSignIn(false);
         } else {
-            auth.signIn();
+            auth.current.signIn();
             handleShouldUserSignIn(true);
         }
     }
