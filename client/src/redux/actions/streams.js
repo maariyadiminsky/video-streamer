@@ -70,5 +70,7 @@ export const getStreams = () => (
             type: GET_STREAMS,
             payload: response.data
         });
+
+        return response;
     }
 );

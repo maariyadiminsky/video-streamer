@@ -1,11 +1,8 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import isEmpty from "lodash/isEmpty";
 
-import { getStreamsSelector } from "../../redux/selectors/streams";
+import { useFetchStreams } from "../../hooks";
 import { getCurrentlyLoggedInUserIdSelector, isUserSignedInSelector } from "../../redux/selectors/auth";
-import { getStreams } from "../../redux/actions/streams";
 import { 
     SHOW_STREAM_PATH, 
     CREATE_NEW_STREAM_PATH, 
@@ -14,15 +11,10 @@ import {
 } from "../../const";
 
 const StreamList = () => {
-    const streams = useSelector(getStreamsSelector);
     const currentLoggedInUserId = useSelector(getCurrentlyLoggedInUserIdSelector);
     const isUserSignedIn = useSelector(isUserSignedInSelector);
 
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(getStreams());
-    }, [dispatch]);
+    const { loading, errors, streams } = useFetchStreams();
 
     // if the incoming stream has the same userId as the
     // current logged in user--render the buttons
@@ -85,13 +77,14 @@ const StreamList = () => {
         ));
     }
 
-    if (isEmpty(streams)) {
+    if (loading) {
         return <div>Loading...</div>
     }
 
     return (
         <div>
             <h2>Streams</h2>
+            <div className="ui error tiny message">{errors}</div>
             <div className="ui celled list">
                 {renderStreams()}
             </div>
