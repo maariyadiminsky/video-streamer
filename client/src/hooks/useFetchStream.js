@@ -1,14 +1,16 @@
 import { useState, useEffect} from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { getStream } from "../redux/actions/streams";
 import { getStreamSelector } from "../redux/selectors/streams";
 
-export const useFetchStream = (id, dispatch, { handleSuccess=null } = {}) => {
+export const useFetchStream = (id, { handleSuccess=null } = {}) => {
     const [state, setState] = useState({
         loading: true,
         errors: "",
     });
+
+    const dispatch = useDispatch();
 
     const stream = useSelector(({ streams }) => getStreamSelector(streams, id));
 
