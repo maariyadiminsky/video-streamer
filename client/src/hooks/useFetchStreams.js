@@ -5,7 +5,7 @@ import isEmpty from "lodash/isEmpty";
 import { getStreamsSelector } from "../redux/selectors/streams";
 import { getStreams } from "../redux/actions/streams";
 
-export const useFetchStreams = () => {
+export const useFetchStreams = ({ handleSuccess = null } = {}) => {
     const [state, setState] = useState({ loading: true, errors: "" });
 
     const dispatch = useDispatch();
@@ -16,10 +16,13 @@ export const useFetchStreams = () => {
         if (isEmpty(streams)) {
             dispatch(getStreams())
             .then(() => setState({ loading: false, errors: "" }))
+            .then(() => handleSuccess && handleSuccess())
             .catch((error) => {
                 console.log(`ERROR FETCHING STREAMS: ${error}`);
                 setState({ loading: false, errors: `${error}` });
             })
+        } else {
+            setState({ loading: false, errors: "" });
         }
     }, [dispatch])
 

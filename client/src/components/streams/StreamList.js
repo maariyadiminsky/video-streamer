@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { useFetchStreams } from "../../hooks";
+import { useFetchStreams } from "../../hooks/useFetchStreams";
 import { getCurrentlyLoggedInUserIdSelector, isUserSignedInSelector } from "../../redux/selectors/auth";
 import { 
     SHOW_STREAM_PATH, 
@@ -53,6 +53,10 @@ const StreamList = () => {
         return "";
     }
 
+    const renderErrors = () => errors && (
+        <div className="ui error tiny message">{errors}</div>
+    );
+
     const renderStreams = () => {
         if (streams && streams.length === 0) {
             return <div>No streams yet! Try creating one.</div>
@@ -84,7 +88,7 @@ const StreamList = () => {
     return (
         <div>
             <h2>Streams</h2>
-            <div className="ui error tiny message">{errors}</div>
+            {renderErrors()}
             <div className="ui celled list">
                 {renderStreams()}
             </div>
