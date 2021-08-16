@@ -9,13 +9,13 @@ import StreamForm from "./StreamForm";
 
 const StreamEdit = ({ history }) => {
     const dispatch = useDispatch();
-    
+
     const { id } = useParams();
-    const { loading, errors, stream } = useFetchStream(id, dispatch);
+    const { loading, errors, stream } = useFetchStream(id);
 
     const handleOnSubmit = (formValues) => {
         if (!id) return;
-        
+
         dispatch(editStream(id, formValues))
         .then(({ status }) => status === RESPONSE_STATUS_SUCCESS && history.push(STREAMS_LIST_PATH))
         .catch(error => console.log(error));

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getStream } from "../redux/actions/streams";
 import { getStreamSelector } from "../redux/selectors/streams";
 
-export const useFetchStream = (id, { handleSuccess=null } = {}) => {
+export const useFetchStream = (id, { handleSuccess = null } = {}) => {
     const [state, setState] = useState({
         loading: true,
         errors: "",

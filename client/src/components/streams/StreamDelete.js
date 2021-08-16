@@ -1,10 +1,8 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { useParams } from "react-router-dom";
-import isEmpty from "lodash/isEmpty";
 
-import { getStreamSelector } from "../../redux/selectors/streams";
-import { getStream, deleteStream } from "../../redux/actions/streams";
+import { useFetchStream } from "../../hooks/useFetchStream";
+import { deleteStream } from "../../redux/actions/streams";
 import { STREAMS_LIST_PATH, RESPONSE_STATUS_SUCCESS } from "../../const";
 
 import Modal from "../Modal";
@@ -20,14 +18,10 @@ const titleStyles = {
     fontWeight: "bold"
 }
 const StreamDelete = ({ history}) => {
-    const { id } = useParams();
-    const stream = useSelector(({ streams }) => getStreamSelector(streams, id));
-
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (isEmpty(stream)) dispatch(getStream(id));
-    }, [dispatch]);
+    const { id } = useParams();
+    const { loading, errors, stream } = useFetchStream(id);
 
     const handleDeleteStream = () => {
         if (!id) return;
@@ -37,14 +31,14 @@ const StreamDelete = ({ history}) => {
         .catch(error => console.log(error));
     };
 
-    const renderContent = (title) => (
+    const renderContent = ({ title }) => (
         <div style={contentStyles}>
             Are you sure you want to delete this stream?
             <p style={titleStyles}>{title}</p>
         </div>
     );
 
-    if (isEmpty(stream)) {
+    if (loading) {
         return <div>Loading...</div>;
     }
 
@@ -52,12 +46,13 @@ const StreamDelete = ({ history}) => {
         <div>
             <Modal 
                 header="Delete Stream"
-                content={renderContent(stream.title)}
+                content={stream && renderContent(stream)}
                 cancelButtonText="Nevermind"
                 confirmButtonText="Yes, I'm sure"
                 handleConfirm={handleDeleteStream}
                 customCancelPath={STREAMS_LIST_PATH}
                 history={history}
+                parentErrors={errors}
             />
         </div>
     );
