@@ -2,17 +2,16 @@ import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import { useFetchStream } from "../../hooks/useFetchStream";
-import { GET_STREAM, EDIT_STREAM } from "../../redux/actions/types";
 import { editStream } from "../../redux/actions/streams";
 import { STREAMS_LIST_PATH, RESPONSE_STATUS_SUCCESS } from "../../const";
 
 import StreamForm from "./StreamForm";
 
 const StreamEdit = ({ history }) => {
-    const { id } = useParams();
-    const { loading, errors, stream } = useFetchStream(GET_STREAM, id);
-
     const dispatch = useDispatch();
+    
+    const { id } = useParams();
+    const { loading, errors, stream } = useFetchStream(id, dispatch);
 
     const handleOnSubmit = (formValues) => {
         if (!id) return;
