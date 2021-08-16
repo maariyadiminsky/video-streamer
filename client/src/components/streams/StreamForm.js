@@ -8,6 +8,7 @@ const StreamForm = ({
     fieldDescription,
     buttonText,
     handleOnSubmit, // passed from parent component
+    parentErrors,
 }) => {
     const validate = ({ title, description }) => {
         let errors = {};
@@ -51,6 +52,7 @@ const StreamForm = ({
             {({ handleSubmit }) => ( // from react-final form, calls event.preventDefault()
                 <form onSubmit={handleSubmit} className="ui form error">
                     <h1>{formTitle}</h1>
+                    <div className="ui error tiny message">{parentErrors}</div>
                     <Field name="title" component={renderInput} label={fieldTitle}/>
                     <Field name="description" component={renderInput} label={fieldDescription} />
                     <button className="ui button large inverted red">{buttonText}</button>

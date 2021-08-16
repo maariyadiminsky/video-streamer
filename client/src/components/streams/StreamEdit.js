@@ -1,37 +1,28 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import isEmpty from "lodash/isEmpty";
 
-import { getStreamSelector } from "../../redux/selectors/streams";
-import { getStream, editStream } from "../../redux/actions/streams";
+import { useFetchStream } from "../../hooks/useFetchStream";
+import { GET_STREAM, EDIT_STREAM } from "../../redux/actions/types";
+import { editStream } from "../../redux/actions/streams";
 import { STREAMS_LIST_PATH, RESPONSE_STATUS_SUCCESS } from "../../const";
 
 import StreamForm from "./StreamForm";
 
 const StreamEdit = ({ history }) => {
     const { id } = useParams();
-    const stream = useSelector(({ streams }) => getStreamSelector(streams, id));
+    const { loading, errors, stream } = useFetchStream(GET_STREAM, id);
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (isEmpty(stream)) dispatch(getStream(id));
-    }, [dispatch]);
-
     const handleOnSubmit = (formValues) => {
         if (!id) return;
-    /*  
-        todo: handle error better here
-        see if the issue is related to internet connection etc.
-        and based on the issue show a clear warning message 
-    */
-    dispatch(editStream(id, formValues))
+        
+        dispatch(editStream(id, formValues))
         .then(({ status }) => status === RESPONSE_STATUS_SUCCESS && history.push(STREAMS_LIST_PATH))
         .catch(error => console.log(error));
     }
 
-    if (isEmpty(stream)) {
+    if (loading) {
         return <div>Loading...</div>
     }
 
@@ -46,6 +37,7 @@ const StreamEdit = ({ history }) => {
             fieldDescription="Edit Description"
             buttonText="Update Stream"
             handleOnSubmit={handleOnSubmit}
+            parentErrors={errors}
         />
     );
 }
