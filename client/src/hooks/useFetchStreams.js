@@ -15,8 +15,10 @@ export const useFetchStreams = ({ handleSuccess = null } = {}) => {
     useEffect(() => {
         if (isEmpty(streams)) {
             dispatch(getStreams())
-            .then(() => setState({ loading: false, errors: "" }))
-            .then(() => handleSuccess && handleSuccess())
+            .then(({ data }) => {
+                setState({ loading: false, errors: "" });
+                handleSuccess && handleSuccess(data);
+            })
             .catch((error) => {
                 console.log(`ERROR FETCHING STREAMS: ${error}`);
                 setState({ loading: false, errors: `${error}` });

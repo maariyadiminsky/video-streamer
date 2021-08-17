@@ -18,8 +18,10 @@ export const useFetchStream = (id, { handleSuccess = null } = {}) => {
         setState(({ loading: true, error: "" }));
 
         dispatch(getStream(id))
-            .then(() => setState(({ loading: false, error: "" })))
-            .then(() => handleSuccess && handleSuccess())
+            .then(({ data }) => {
+                setState({ loading: false, error: "" });
+                handleSuccess && handleSuccess(data);
+            })
             .catch((error) => {
                 console.log(`ERROR FETCHING STREAM: ${error}`);
                 setState(({ loading: false, errors: `${error}` }));
