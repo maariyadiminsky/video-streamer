@@ -26,7 +26,7 @@ export const useFetchStreams = ({ handleSuccess = null } = {}) => {
         } else {
             setState({ loading: false, errors: "" });
         }
-    }, [dispatch])
+    }, [dispatch, streams, handleSuccess])
 
     return {
         ...state,

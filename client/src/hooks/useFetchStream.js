@@ -26,7 +26,7 @@ export const useFetchStream = (id, { handleSuccess = null } = {}) => {
                 console.log(`ERROR FETCHING STREAM: ${error}`);
                 setState(({ loading: false, errors: `${error}` }));
             });
-    }, [dispatch]);
+    }, [dispatch, id, handleSuccess]);
 
     return {
         ...state,
