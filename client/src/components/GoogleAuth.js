@@ -12,7 +12,7 @@ const GoogleAuth = () => {
     const dispatch = useDispatch();
 
     // for setting user sign in status
-    const handleShouldUserSignIn = useCallback(() => (shouldUserSignIn = null) => {
+    const handleShouldUserSignIn = useCallback((shouldUserSignIn = null) => {
         // nothing should happen while google api is still loading sign in status
         if (shouldUserSignIn === null) return;
 
@@ -41,7 +41,7 @@ const GoogleAuth = () => {
             });
         });
     }, [dispatch, handleShouldUserSignIn]);
-
+    
     const getUserId = () => auth.current ? auth.current.currentUser.get().getId() : null;
 
     // for when user clicks sign in/ sign out auth button

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import flv from "flv.js";
 
@@ -19,22 +19,6 @@ const StreamShow = () => {
 
     const videoRef = useRef();
     const flvVideoPlayer = useRef();
-    const setupFLVPlayer = useCallback(() => (streamId) => {
-        // exit if videoRef is undefined or flvVideoPlayer already exists
-        if (!videoRef.current || (flvVideoPlayer && flvVideoPlayer.current)) return;
-
-        flvVideoPlayer.current = flv.createPlayer({
-            type: VIDEO_TYPE_FLV,
-            url: FLV_STREAM_URL(streamId)
-        });
-
-        // attach video ref
-        flvVideoPlayer.attachMediaElement(videoRef.current);
-
-        // load it
-        flvVideoPlayer.load();
-    }, [videoRef]);
-    
     useEffect(() => {
         if (stream) {
             setupFLVPlayer(id);
@@ -42,8 +26,24 @@ const StreamShow = () => {
 
         // note: tells flv player to stop streaming
         // and removes attachment to the video
-        return () => flvVideoPlayer && flvVideoPlayer.destroy();
-    }, [stream, id, setupFLVPlayer])
+        return () => flvVideoPlayer && flvVideoPlayer.current && flvVideoPlayer.current.destroy();
+    }, [stream, id])
+
+    const setupFLVPlayer = (streamId) => {
+        // exit if videoRef is undefined or flvVideoPlayer already exists
+        if (!videoRef.current) return;
+
+        flvVideoPlayer.current = flv.createPlayer({
+            type: VIDEO_TYPE_FLV,
+            url: FLV_STREAM_URL(streamId)
+        });
+
+        // attach video ref
+        flvVideoPlayer.current.attachMediaElement(videoRef.current);
+
+        // load it
+        flvVideoPlayer.current.load();
+    };
 
     const renderErrors = () => errors && (
         <div className="ui error tiny message">{errors}</div>
