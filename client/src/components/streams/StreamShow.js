@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import flv from "flv.js";
 
@@ -18,21 +18,12 @@ const StreamShow = () => {
     const { loading, errors, stream } = useFetchStream(id, options);
 
     const videoRef = useRef();
-    let flvVideoPlayer;
-    useEffect(() => {
-        if (stream && videoRef.current && !flvVideoPlayer) {
-            setupFLVPlayer(id);
-        }
+    const flvVideoPlayer = useRef();
+    const setupFLVPlayer = useCallback(() => (streamId) => {
+        // exit if videoRef is undefined or flvVideoPlayer already exists
+        if (!videoRef.current || (flvVideoPlayer && flvVideoPlayer.current)) return;
 
-        // note: tells flv player to stop streaming
-        // and removes attachment to the video
-        return () => flvVideoPlayer && flvVideoPlayer.destroy();
-    }, [stream])
-
-    const setupFLVPlayer = (streamId) => {
-        if (!videoRef.current) return;
-
-        flvVideoPlayer = flv.createPlayer({
+        flvVideoPlayer.current = flv.createPlayer({
             type: VIDEO_TYPE_FLV,
             url: FLV_STREAM_URL(streamId)
         });
@@ -42,7 +33,17 @@ const StreamShow = () => {
 
         // load it
         flvVideoPlayer.load();
-    }
+    }, [videoRef]);
+    
+    useEffect(() => {
+        if (stream) {
+            setupFLVPlayer(id);
+        }
+
+        // note: tells flv player to stop streaming
+        // and removes attachment to the video
+        return () => flvVideoPlayer && flvVideoPlayer.destroy();
+    }, [stream, id, setupFLVPlayer])
 
     const renderErrors = () => errors && (
         <div className="ui error tiny message">{errors}</div>
