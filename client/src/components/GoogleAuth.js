@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback} from "react";
 import { useDispatch } from "react-redux";
 
 import { useAuth } from "../hooks/useAuth";
@@ -10,6 +10,15 @@ const GoogleAuth = () => {
     const { isUserSignedIn } = useAuth();
 
     const dispatch = useDispatch();
+
+    // for setting user sign in status
+    const handleShouldUserSignIn = useCallback(() => (shouldUserSignIn = null) => {
+        // nothing should happen while google api is still loading sign in status
+        if (shouldUserSignIn === null) return;
+
+        // sign user in or out
+        shouldUserSignIn ? dispatch(signUserIn(getUserId())) : dispatch(signUserOut(getUserId()));
+    }, [dispatch]);
 
     const auth = useRef("");
     useEffect(() => {
@@ -31,16 +40,7 @@ const GoogleAuth = () => {
                 auth.current.isSignedIn.listen(handleShouldUserSignIn);
             });
         });
-    }, [dispatch]);
-
-    // for setting user sign in status
-    const handleShouldUserSignIn = (shouldUserSignIn = null) => {
-        // nothing should happen while google api is still loading sign in status
-        if (shouldUserSignIn === null) return;
-
-        // sign user in or out
-        shouldUserSignIn ? dispatch(signUserIn(getUserId())) : dispatch(signUserOut(getUserId()));
-    }
+    }, [dispatch, handleShouldUserSignIn]);
 
     const getUserId = () => auth.current ? auth.current.currentUser.get().getId() : null;
 
