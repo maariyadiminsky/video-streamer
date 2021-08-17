@@ -1,18 +1,17 @@
 import { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { isUserSignedInSelector } from "../redux/selectors/auth";
+import { useAuth } from "../hooks/useAuth";
 import { signUserIn, signUserOut } from "../redux/actions/auth";
 import { LOADING, EMAIL, SIGN_IN, SIGN_OUT } from "../const";
 
 // NOTE: Google API's authentication status persists between page reloads
 const GoogleAuth = () => {
-    const isUserSignedIn = useSelector(isUserSignedInSelector);
+    const { isUserSignedIn } = useAuth();
 
     const dispatch = useDispatch();
 
     const auth = useRef("");
-
     useEffect(() => {
         // loads up google api OAuth client library (I only need email for this app)
         window.gapi.load("client:auth2", () => {

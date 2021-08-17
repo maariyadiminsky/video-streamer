@@ -32,4 +32,4 @@ export const useFetchStream = (id, { handleSuccess = null } = {}) => {
         ...state,
         stream
     };
-}
+};

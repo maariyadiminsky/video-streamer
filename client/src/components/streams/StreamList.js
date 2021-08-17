@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { useFetchStreams } from "../../hooks/useFetchStreams";
-import { getCurrentlyLoggedInUserIdSelector, isUserSignedInSelector } from "../../redux/selectors/auth";
+import { useAuth } from "../../hooks/useAuth";
 import { 
     SHOW_STREAM_PATH, 
     CREATE_NEW_STREAM_PATH, 
@@ -11,8 +10,7 @@ import {
 } from "../../const";
 
 const StreamList = () => {
-    const currentLoggedInUserId = useSelector(getCurrentlyLoggedInUserIdSelector);
-    const isUserSignedIn = useSelector(isUserSignedInSelector);
+    const { isUserSignedIn, currentLoggedInUserId } = useAuth();
 
     const { loading, errors, streams } = useFetchStreams();
 

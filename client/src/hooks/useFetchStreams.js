@@ -31,5 +31,5 @@ export const useFetchStreams = ({ handleSuccess = null } = {}) => {
     return {
         ...state,
         streams
-    }
-}
+    };
+};
