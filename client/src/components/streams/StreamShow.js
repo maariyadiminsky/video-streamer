@@ -9,16 +9,15 @@ const videoStyles = {
     width: "100%"
 }
 const StreamShow = () => {
-    const videoRef = useRef();
-    const { id } = useParams();
-
     const handleFetchStreamSuccess = (stream) => {
         stream && setupFLVPlayer(stream.id)
     };
 
+    const { id } = useParams();
     const options = { handleSuccess: handleFetchStreamSuccess };
     const { loading, errors, stream } = useFetchStream(id, options);
 
+    const videoRef = useRef();
     let flvVideoPlayer;
     useEffect(() => {
         if (stream && videoRef.current && !flvVideoPlayer) {
