@@ -45,7 +45,7 @@ Follow these steps carefully to get the project working on your end. Please let 
     6. Create `.env.local` within the `client` folder—an example is provided. Add your client id to `REACT_APP_GOOGLE_AUTH_CLIENT_ID=""`
 3. **Run the servers!**
     1. There are 3 servers total so make sure to have 3 tabs open. One separate tab for each folder ie. `client`, `streams-mock-api` and `rtmp-server`.
-    2. Inside each tab run `yarn start`, so you will be running this command 3 times total.
+    2. Run `yarn start`, inside `client` and `rtmp-server` so you will be running this command twice. Run `yarn start-dev` inside of `streams-database`.
     3. Go to `http://localhost:3000` to see the React client side. Go to `http://localhost:3001` to view the API server. For the `rtmp-server`, you don't need to go anywhere(unless you want to go eat sushi or something—*ba dum tss*), just make sure the server is running.
 4. **Test a few features**
     1. You should see a list of streams.
