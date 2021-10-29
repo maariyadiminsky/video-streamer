@@ -1,16 +1,19 @@
+import React from "react";
 import { render } from "@testing-library/react";
-import Provider from "react-redux";
+import { Provider } from "react-redux";
 import store from "../../redux/store";
 
-// note: this makes sure all components tested 
-// are wrapped by a Provider and store is passed in
-const ReduxProvider = ({ children }) => (
-    <Provider store={store}>{children}</Provider>
+const Providers = ({children}) => (
+    <Provider store={store}>
+        {children}
+    </Provider>
 );
 
-const reduxRender = (ui, options) => 
-    render(ui, { wrapper: ReduxProvider }, ...options);
+const customRender = (ui, options) =>
+  render(ui, {wrapper: Providers, ...options})
 
-export * from "@testing-library/react";
+// re-export everything
+export * from "@testing-library/react"
 
-export { reduxRender as render };
+// override render method
+export { customRender as render }
