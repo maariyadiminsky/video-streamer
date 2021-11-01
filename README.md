@@ -61,6 +61,6 @@ Follow these steps carefully to get the project working on your end. Please let 
    5. Click the `play` button inside your client's video and enjoy your stream!
 
 ## Todo
-- Tests for each component
-- Improved styles
+- Add more tests, fix async warnings
+- Improve styles via Tailwind
 
