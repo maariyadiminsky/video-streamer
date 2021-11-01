@@ -9,8 +9,8 @@ window.gapi.auth2.getAuthInstance = () =>
             this.get = () => this.signedIn;
             this.listen = (f) => f();
         };
-        this.signIn = () => Promise.resolve(this.isSignedIn.signedIn = true);
-        this.signOut = () => Promise.resolve(this.isSignedIn.signedIn = false);
+        this.signIn =  () => Promise.resolve(this.isSignedIn.signedIn = true);
+        this.signOut =  () => Promise.resolve(this.isSignedIn.signedIn = false);
         this.currentUser = () => {
         this.get = () => 
             () => {
@@ -26,7 +26,7 @@ window.gapi.auth2.getAuthInstance = () =>
             };
         };
     };
-window.gapi.auth2.init = () => {return Promise.resolve({});}
+window.gapi.auth2.init = () => Promise.resolve({});
 window.gapi.client.init = (v) => true;
 window.gapi.load = (a, f) => Promise.resolve();
 

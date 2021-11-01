@@ -10,7 +10,7 @@ const Header = () => {
             </Link>
             <div className="right menu">
                 <Link to="/" className="item">
-                        Streams
+                    Streams
                 </Link>
                 <div className="item">
                     <GoogleAuth />
